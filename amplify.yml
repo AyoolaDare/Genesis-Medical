@@ -1,0 +1,27 @@
+version: 1
+applications:
+  - appRoot: .
+    backend:
+      phases:
+        build:
+          commands:
+            - pip install -r requirements.txt
+            - pip install awsgi
+      artifacts:
+        - '**/*'
+    frontend:
+      phases:
+        build:
+          commands:
+            - echo "No frontend build required"
+      artifacts:
+        - '**/*'
+    customHeaders:
+      - pattern: '**/*'
+        headers:
+          - key: 'Strict-Transport-Security'
+            value: 'max-age=31536000; includeSubDomains'
+          - key: 'X-Frame-Options'
+            value: 'SAMEORIGIN'
+          - key: 'X-XSS-Protection'
+            value: '1; mode=block'

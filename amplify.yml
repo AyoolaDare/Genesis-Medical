@@ -3,25 +3,28 @@ applications:
   - appRoot: .
     backend:
       phases:
+        preBuild:
+          commands:
+            - pip install --upgrade pip
+            - pip install -r requirements.txt
         build:
           commands:
-            - pip install -r requirements.txt
-            - pip install awsgi
+            - echo "Building Flask application"
       artifacts:
-        - '**/*'
+        baseDirectory: .
+        files:
+          - '**/*'
     frontend:
       phases:
         build:
           commands:
             - echo "No frontend build required"
       artifacts:
-        - '**/*'
+        baseDirectory: .
+        files:
+          - '**/*'
     customHeaders:
       - pattern: '**/*'
         headers:
-          - key: 'Strict-Transport-Security'
-            value: 'max-age=31536000; includeSubDomains'
-          - key: 'X-Frame-Options'
-            value: 'SAMEORIGIN'
-          - key: 'X-XSS-Protection'
-            value: '1; mode=block'
+          - key: 'Cache-Control'
+            value: 'no-store'
